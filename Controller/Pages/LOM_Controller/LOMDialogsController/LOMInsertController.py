@@ -51,11 +51,11 @@ class LOMInsertController(QObject):
                     self.none_if_empty(self.view.lom_sign.text()),
                     self.none_if_empty(self.view.lom_comment.text())]]
 
-        new_data[0][1] = int(new_data[0][1])
         if new_data[0][0] is None or new_data[0][1] is None or new_data[1][0] is None or new_data[1][1] is None:
             self.message = MessageDialog(self.is_dark,"Please fill the required fields", 0)
             self.message.show()
             return
+        new_data[0][1] = int(new_data[0][1])
 
         result,success = self.model.insert(new_data[0][0],new_data[0][1],new_data[0][2],new_data[0][3],new_data[0][4],
                           new_data[1][0],new_data[1][1],new_data[1][2],new_data[1][3],new_data[1][4],

@@ -28,6 +28,6 @@ class MainWindow(QMainWindow):
 
     def set_icon(self):
         if self.is_dark:
-            self.setWindowIcon(QIcon(icon("Sentido_dark.png")))
+            self.setWindowIcon(QIcon(icon("Sentido_dark.jpg")))
         else:
             self.setWindowIcon(QIcon(icon("Sentido_light.jpg")))
