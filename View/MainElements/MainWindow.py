@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QMainWindow, QHBoxLayout, QWidget
 
 from View.MainElements.IconPath import icon
 from View.Pages.PagesStack import PagesStack
-from View.NavBar.NavBar import NavBar
+from View.Sidebar.Sidebar import Sidebar
 
 class MainWindow(QMainWindow):
     def __init__(self,theme,*pages):
@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Sentido datahub")
         self.set_icon()
 
-        self.navbar = NavBar(self.is_dark)
+        self.navbar = Sidebar(self.is_dark)
         self.stack = PagesStack(*pages)
 
         self.setup_widgets()

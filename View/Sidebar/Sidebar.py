@@ -11,7 +11,7 @@ from PySide6.QtGui import QIcon
 from View.MainElements.IconPath import icon
 
 
-class NavBar(QWidget):
+class Sidebar(QWidget):
     page_selected = Signal(str)
 
     def __init__(self,theme):
