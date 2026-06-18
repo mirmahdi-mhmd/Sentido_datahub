@@ -1,6 +1,6 @@
 """
-Navigation bar widget for the application.
-This module defines the NavBar class, a QWidget-based vertical navigation panel with three buttons: Components, PCBs, and Pages.
+Sidebar widget for the application.
+This module defines the NavBar class, a QWidget-based vertical Side panel with three buttons: Components, PCBs, and Pages.
 Each button is checkable, grouped exclusively, and emits a 'page_selected' signal with a string identifier when clicked.
 The widget adapts its style and icons based on the system theme (dark/light).
 """
