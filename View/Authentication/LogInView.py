@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QLineEdit, QLabel, QApplication, QHBoxLayout
+from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QLineEdit, QLabel, QHBoxLayout
 from PySide6.QtCore import Signal,Qt
 from PySide6.QtGui import QIcon
 
@@ -172,8 +172,3 @@ class LogInView(QDialog):
 
         for button in (self.forgot_button,self.admin_panel_button):
             button.setStyleSheet(other_buttons_style)
-
-app = QApplication([])
-window = LogInView(True)
-window.show()
-app.exec()
