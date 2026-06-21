@@ -7,19 +7,24 @@ from View.MainElements.IconPath import icon
 
 class LogInView(QDialog):
     login_signal = Signal()
+    forgot_password_signal = Signal()
+    admin_panel_signal = Signal()
 
     def __init__(self, theme):
         super().__init__()
         self.is_dark = theme
         self.setWindowTitle("Login")
-        self.setFixedSize(300,250)
+        self.setFixedSize(300,280)
         self.username = QLineEdit(self)
         self.password = QLineEdit(self)
 
         self.visibility_button = QPushButton(self)
-        self.login_button = QPushButton("Log In",self)
+        self.forgot_button = QPushButton("Forgot my password",self)
+        self.admin_panel_button = QPushButton("Admin panel",self)
+        self.login_button = QPushButton("Login",self)
 
         self.setup_widgets()
+        self.setup_signals()
         self.setup_style()
 
     def setup_widgets(self):
@@ -38,26 +43,35 @@ class LogInView(QDialog):
         v_layout.addWidget(signup_label)
 
         self.username.setFont(font)
-        font.setPointSize(15)
+        font.setPointSize(13)
         self.username.setFont(font)
         self.username.setPlaceholderText("Username")
         v_layout.addWidget(self.username)
 
         h_layout = QHBoxLayout()
 
-        if self.is_dark:
-            self.visibility_button.setIcon(QIcon(icon("Invisible_light.png")))
-        else:
-            self.visibility_button.setIcon(QIcon(icon("Invisible_dark.png")))
-
         self.password.setFont(font)
         self.password.setPlaceholderText("Password")
         h_layout.addWidget(self.password)
         h_layout.setContentsMargins(0,0,0,0)
         h_layout.setSpacing(0)
-        self.visibility_button.setFixedSize(31,31)
+        self.visibility_button.setFixedSize(27,27)
+        self.visibility_button.setCheckable(True)
+        self.visibility_button.setChecked(False)
+        self.password.setEchoMode(QLineEdit.EchoMode.Password)
         h_layout.addWidget(self.visibility_button)
 
+        v_layout.addLayout(h_layout)
+
+        h_layout = QHBoxLayout()
+
+        self.forgot_button.setFixedSize(115,20)
+        h_layout.addWidget(self.forgot_button)
+
+        self.admin_panel_button.setFixedSize(75, 20)
+        h_layout.addWidget(self.admin_panel_button)
+
+        h_layout.insertStretch(1,1)
         v_layout.addLayout(h_layout)
 
         self.login_button.setFont(font)
@@ -65,11 +79,29 @@ class LogInView(QDialog):
 
         v_layout.setAlignment(Qt.AlignCenter)
         v_layout.insertStretch(0,1)
-        v_layout.insertStretch(4,2)
+        v_layout.insertStretch(5,2)
         self.setLayout(v_layout)
 
     def setup_signals(self):
         self.login_button.clicked.connect(self.login_signal.emit)
+        self.forgot_button.clicked.connect(self.forgot_password_signal.emit)
+        self.admin_panel_button.clicked.connect(self.admin_panel_signal.emit)
+        self.visibility_button.toggled.connect(self.change_visibility)
+
+    def change_visibility(self,visible:bool):
+        if visible:
+            self.password.setEchoMode(QLineEdit.EchoMode.Normal)
+            if self.is_dark:
+                self.visibility_button.setIcon(QIcon(icon("Visible_light.png")))
+            else:
+                self.visibility_button.setIcon(QIcon(icon("Visible_dark.png")))
+
+        else:
+            self.password.setEchoMode(QLineEdit.EchoMode.Password)
+            if self.is_dark:
+                self.visibility_button.setIcon(QIcon(icon("Invisible_light.png")))
+            else:
+                self.visibility_button.setIcon(QIcon(icon("Invisible_dark.png")))
 
     def setup_style(self):
         base_button_style = """
@@ -80,13 +112,13 @@ class LogInView(QDialog):
 
         base_lineedit_style = """
                 QLineEdit {
-                    border-radius: None;
+                    border-radius: 0px;
                     border-bottom: 2px solid gray;
-                    background-color: #2f2f2f;
                 }"""
         if self.is_dark:
             self.setWindowIcon(QIcon(icon("Account_light.png")))
-            theme_button_style = """
+            self.visibility_button.setIcon(QIcon(icon("Invisible_light.png")))
+            login_button_style = """
             QPushButton {
                 background-color: #2f2f2f;
                 border: 1px solid #b03b02; 
@@ -94,29 +126,52 @@ class LogInView(QDialog):
             theme_lineedit_style = """ 
             QLineEdit:focus {
                 border-bottom: 2px solid #b03b02;
+                background-color: #2f2f2f;
+            }"""
+            visibility_button_style = """
+            QPushButton {
+                border: None;
+                background-color: #2f2f2f;
+            }"""
+            other_buttons_style = """
+            QPushButton {
+                border: None;
+            }
+            QPushButton:hover {
+                background-color: #b03b02;
             }"""
         else:
             self.setWindowIcon(QIcon(icon("Account_dark.png")))
-            theme_button_style = """
+            self.visibility_button.setIcon(QIcon(icon("Invisible_dark.png")))
+            login_button_style = """
             QPushButton {
-                background-color: white;
                 border: 1px solid #ff6f29; 
             }"""
             theme_lineedit_style = """ 
             QLineEdit:focus {
                 border-bottom: 2px solid #ff6f29;
             }"""
+            visibility_button_style = """
+            QPushButton {
+                border: None;
+            }"""
+            other_buttons_style = """
+            QPushButton {
+                border: None;
+            }
+            QPushButton:hover {
+                background-color: #ff6f29;
+            }"""
 
         for lineedit in [self.username, self.password]:
             lineedit.setStyleSheet(base_lineedit_style + theme_lineedit_style)
 
-        self.login_button.setStyleSheet(base_button_style + theme_button_style)
+        self.login_button.setStyleSheet(base_button_style + login_button_style)
 
-        self.visibility_button.setStyleSheet("""
-        QPushButton {
-            border: None;
-            background-color: #2f2f2f;
-        }""")
+        self.visibility_button.setStyleSheet(visibility_button_style)
+
+        for button in (self.forgot_button,self.admin_panel_button):
+            button.setStyleSheet(other_buttons_style)
 
 app = QApplication([])
 window = LogInView(True)
