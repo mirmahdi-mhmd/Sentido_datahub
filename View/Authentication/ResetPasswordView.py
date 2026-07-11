@@ -68,7 +68,7 @@ class ResetPasswordView(QDialog):
         h_layout.setContentsMargins(0, 0, 0, 0)
         h_layout.setSpacing(0)
 
-        self.visibility_button.setFixedSize(27, 27)
+        self.visibility_button.setFixedSize(26, 26)
         self.visibility_button.setCheckable(True)
         self.visibility_button.setChecked(False)
         h_layout.addWidget(self.visibility_button)
