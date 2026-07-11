@@ -27,7 +27,7 @@ class ResetPasswordView(QDialog):
         self.visibility_button = QPushButton(self)
         self.send_code_button = QPushButton("Send code", self)
         self.confirm_code_button = QPushButton("Confirm", self)
-        self.change_password_button = QPushButton("Reset password", self)
+        self.reset_password_button = QPushButton("Reset password", self)
 
         self.setup_widgets()
         self.setup_signals()
@@ -79,8 +79,14 @@ class ResetPasswordView(QDialog):
         self.confirm_password.setEchoMode(QLineEdit.EchoMode.Password)
         v_layout.addWidget(self.confirm_password)
 
-        self.change_password_button.setFont(font)
-        v_layout.addWidget(self.change_password_button)
+        self.reset_password_button.setFont(font)
+        v_layout.addWidget(self.reset_password_button)
+
+        self.code.setDisabled(True)
+        self.password.setDisabled(True)
+        self.confirm_password.setDisabled(True)
+        self.confirm_code_button.setDisabled(True)
+        self.reset_password_button.setDisabled(True)
 
         v_layout.setAlignment(Qt.AlignCenter)
         v_layout.insertStretch(2, 1)
@@ -90,7 +96,7 @@ class ResetPasswordView(QDialog):
     def setup_signals(self):
         self.send_code_button.clicked.connect(self.send_code_signal.emit)
         self.confirm_code_button.clicked.connect(self.confirm_code_signal.emit)
-        self.change_password_button.clicked.connect(self.change_password_signal.emit)
+        self.reset_password_button.clicked.connect(self.change_password_signal.emit)
         self.visibility_button.toggled.connect(self.change_visibility)
 
     def change_visibility(self, visible: bool):
@@ -172,7 +178,7 @@ class ResetPasswordView(QDialog):
         for lineedit in [self.username, self.code, self.password, self.confirm_password]:
             lineedit.setStyleSheet(base_lineedit_style + theme_lineedit_style)
 
-        self.change_password_button.setStyleSheet(base_button_style + action_button_style)
+        self.reset_password_button.setStyleSheet(base_button_style + action_button_style)
         self.visibility_button.setStyleSheet(visibility_button_style)
 
         for button in (self.send_code_button, self.confirm_code_button):

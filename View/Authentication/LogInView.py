@@ -172,18 +172,3 @@ class LogInView(QDialog):
 
         for button in (self.forgot_button,self.admin_panel_button):
             button.setStyleSheet(other_buttons_style)
-
-import sys
-from PySide6.QtWidgets import QApplication
-
-def main() -> int:
-    app = QApplication(sys.argv)
-
-    view = LogInView(True)
-    view.show()
-
-    return app.exec()
-
-
-if __name__ == "__main__":
-    sys.exit(main())
