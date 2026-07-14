@@ -1,29 +1,27 @@
-from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QLineEdit, QHBoxLayout
+from PySide6.QtWidgets import QDialog, QPushButton, QVBoxLayout, QLineEdit, QLabel, QHBoxLayout
 from PySide6.QtCore import Signal,Qt
 from PySide6.QtGui import QIcon
 
 from View.MainElements.IconPath import icon
 
 
-class ResetPasswordView(QDialog):
-    send_code_signal = Signal()
-    confirm_code_signal = Signal()
-    change_password_signal = Signal()
+class LoginView(QDialog):
+    login_signal = Signal()
+    forgot_password_signal = Signal()
+    admin_panel_signal = Signal()
 
     def __init__(self, theme):
         super().__init__()
         self.is_dark = theme
-        self.setWindowTitle("Create a new password")
-        self.setFixedSize(300, 240)
+        self.setWindowTitle("Login")
+        self.setFixedSize(300,260)
         self.username = QLineEdit(self)
-        self.code = QLineEdit(self)
         self.password = QLineEdit(self)
-        self.confirm_password = QLineEdit(self)
 
         self.visibility_button = QPushButton(self)
-        self.send_code_button = QPushButton("Send code", self)
-        self.confirm_code_button = QPushButton("Confirm", self)
-        self.reset_password_button = QPushButton("Reset password", self)
+        self.forgot_button = QPushButton("Forgot my password",self)
+        self.admin_panel_button = QPushButton("Admin panel",self)
+        self.login_button = QPushButton("Login",self)
 
         self.setup_widgets()
         self.setup_signals()
@@ -32,80 +30,74 @@ class ResetPasswordView(QDialog):
     def setup_widgets(self):
         v_layout = QVBoxLayout()
         font = self.font()
-        font.setPointSize(13)
+        font.setPointSize(35)
 
-        h_layout = QHBoxLayout()
+        signup_label = QLabel("Welcome!")
+        signup_label.setFont(font)
+        signup_label.setAlignment(Qt.AlignCenter)
+        signup_label.setStyleSheet("""
+                QLabel {
+                padding-bottom: 10px;
+                }
+                """)
+        v_layout.addWidget(signup_label)
+
+        self.username.setFont(font)
+        font.setPointSize(13)
         self.username.setFont(font)
         self.username.setPlaceholderText("Username")
-        h_layout.addWidget(self.username)
-        h_layout.setContentsMargins(0, 0, 0, 0)
-        h_layout.setSpacing(0)
-
-        self.send_code_button.setFixedSize(90, 26)
-        h_layout.addWidget(self.send_code_button)
-        v_layout.addLayout(h_layout)
+        v_layout.addWidget(self.username)
 
         h_layout = QHBoxLayout()
-        self.code.setFont(font)
-        self.code.setPlaceholderText("Code")
-        h_layout.addWidget(self.code)
-        h_layout.setContentsMargins(0, 0, 0, 0)
-        h_layout.setSpacing(0)
 
-        self.confirm_code_button.setFixedSize(90, 26)
-        h_layout.addWidget(self.confirm_code_button)
-        v_layout.addLayout(h_layout)
-
-        h_layout = QHBoxLayout()
         self.password.setFont(font)
-        self.password.setPlaceholderText("New password")
-        self.password.setEchoMode(QLineEdit.EchoMode.Password)
+        self.password.setPlaceholderText("Password")
         h_layout.addWidget(self.password)
-        h_layout.setContentsMargins(0, 0, 0, 0)
+        h_layout.setContentsMargins(0,0,0,0)
         h_layout.setSpacing(0)
-
-        self.visibility_button.setFixedSize(26, 26)
+        self.visibility_button.setFixedSize(26,26)
         self.visibility_button.setCheckable(True)
         self.visibility_button.setChecked(False)
+        self.password.setEchoMode(QLineEdit.EchoMode.Password)
         h_layout.addWidget(self.visibility_button)
+
         v_layout.addLayout(h_layout)
 
-        self.confirm_password.setFont(font)
-        self.confirm_password.setPlaceholderText("Confirm password")
-        self.confirm_password.setEchoMode(QLineEdit.EchoMode.Password)
-        v_layout.addWidget(self.confirm_password)
+        h_layout = QHBoxLayout()
 
-        self.reset_password_button.setFont(font)
-        v_layout.addWidget(self.reset_password_button)
+        self.forgot_button.setFixedSize(115,20)
+        h_layout.addWidget(self.forgot_button)
 
-        self.code.setDisabled(True)
-        self.password.setDisabled(True)
-        self.confirm_password.setDisabled(True)
-        self.confirm_code_button.setDisabled(True)
-        self.reset_password_button.setDisabled(True)
+        self.admin_panel_button.setFixedSize(75, 20)
+        h_layout.addWidget(self.admin_panel_button)
+
+        h_layout.insertStretch(1,1)
+        v_layout.addLayout(h_layout)
+
+        self.login_button.setFont(font)
+        v_layout.addWidget(self.login_button)
 
         v_layout.setAlignment(Qt.AlignCenter)
-        v_layout.insertStretch(2, 1)
-        v_layout.insertStretch(5,1)
+        v_layout.insertStretch(0,1)
+        v_layout.insertStretch(5,2)
         self.setLayout(v_layout)
 
     def setup_signals(self):
-        self.send_code_button.clicked.connect(self.send_code_signal.emit)
-        self.confirm_code_button.clicked.connect(self.confirm_code_signal.emit)
-        self.reset_password_button.clicked.connect(self.change_password_signal.emit)
+        self.login_button.clicked.connect(self.login_signal.emit)
+        self.forgot_button.clicked.connect(self.forgot_password_signal.emit)
+        self.admin_panel_button.clicked.connect(self.admin_panel_signal.emit)
         self.visibility_button.toggled.connect(self.change_visibility)
 
-    def change_visibility(self, visible: bool):
+    def change_visibility(self,visible:bool):
         if visible:
             self.password.setEchoMode(QLineEdit.EchoMode.Normal)
-            self.confirm_password.setEchoMode(QLineEdit.EchoMode.Normal)
             if self.is_dark:
                 self.visibility_button.setIcon(QIcon(icon("Visible_light.png")))
             else:
                 self.visibility_button.setIcon(QIcon(icon("Visible_dark.png")))
+
         else:
             self.password.setEchoMode(QLineEdit.EchoMode.Password)
-            self.confirm_password.setEchoMode(QLineEdit.EchoMode.Password)
             if self.is_dark:
                 self.visibility_button.setIcon(QIcon(icon("Invisible_light.png")))
             else:
@@ -126,7 +118,7 @@ class ResetPasswordView(QDialog):
         if self.is_dark:
             self.setWindowIcon(QIcon(icon("Account_light.png")))
             self.visibility_button.setIcon(QIcon(icon("Invisible_light.png")))
-            action_button_style = """
+            login_button_style = """
             QPushButton {
                 background-color: #2f2f2f;
                 border: 1px solid #b03b02; 
@@ -141,17 +133,17 @@ class ResetPasswordView(QDialog):
                 border: None;
                 background-color: #2f2f2f;
             }"""
-            secondary_button_style = """
+            other_buttons_style = """
             QPushButton {
-                border: 2px solid #808080;
+                border: None;
             }
             QPushButton:hover {
-                border-color: #b03b02;
+                background-color: #b03b02;
             }"""
         else:
             self.setWindowIcon(QIcon(icon("Account_dark.png")))
             self.visibility_button.setIcon(QIcon(icon("Invisible_dark.png")))
-            action_button_style = """
+            login_button_style = """
             QPushButton {
                 border: 1px solid #ff6f29; 
             }"""
@@ -163,19 +155,35 @@ class ResetPasswordView(QDialog):
             QPushButton {
                 border: None;
             }"""
-            secondary_button_style = """
+            other_buttons_style = """
             QPushButton {
                 border: None;
             }
             QPushButton:hover {
-                border-color: #ff6f29;
+                background-color: #ff6f29;
             }"""
 
-        for lineedit in [self.username, self.code, self.password, self.confirm_password]:
+        for lineedit in [self.username, self.password]:
             lineedit.setStyleSheet(base_lineedit_style + theme_lineedit_style)
 
-        self.reset_password_button.setStyleSheet(base_button_style + action_button_style)
+        self.login_button.setStyleSheet(base_button_style + login_button_style)
+
         self.visibility_button.setStyleSheet(visibility_button_style)
 
-        for button in (self.send_code_button, self.confirm_code_button):
-            button.setStyleSheet(secondary_button_style)
+        for button in (self.forgot_button,self.admin_panel_button):
+            button.setStyleSheet(other_buttons_style)
+
+import sys
+from PySide6.QtWidgets import QApplication
+
+def main() -> int:
+    app = QApplication(sys.argv)
+
+    view = LoginView(True)
+    view.show()
+
+    return app.exec()
+
+
+if __name__ == "__main__":
+    sys.exit(main())
