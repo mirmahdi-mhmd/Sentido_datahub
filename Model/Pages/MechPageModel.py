@@ -11,7 +11,7 @@ class MechPageModel:
         cursor = self.conn.cursor()
         cursor.execute("""
         SELECT Type,Name,Color,Quantity,Comment
-        FROM tbl_Mech_parts
+        FROM tbl_Mech_part
         ORDER BY Type
         """)
         result = cursor.fetchall()
@@ -24,7 +24,7 @@ class MechPageModel:
 
         cursor.execute(f"""
         SELECT DISTINCT {column_name} 
-        FROM tbl_Mech_parts  
+        FROM tbl_Mech_part  
         """)
         list_distinct = cursor.fetchall()
         result = [i[0] for i in list_distinct]
@@ -36,7 +36,7 @@ class MechPageModel:
         cursor = self.conn.cursor()
         cursor.execute("""
         SELECT Type,Name,Color,Quantity,Comment
-        FROM tbl_Mech_parts
+        FROM tbl_Mech_part
         WHERE Name=?
         """,(mech_name,))
         result = cursor.fetchall()
@@ -49,7 +49,7 @@ class MechPageModel:
 
         try:
             cursor.execute("""
-            INSERT INTO tbl_Mech_parts 
+            INSERT INTO tbl_Mech_part 
             (Type,Name,Color,Quantity,Comment)
             VALUES (?,?,?,?,?)
             """,(mech_type,mech_name,mech_color,mech_qty,mech_comment))
@@ -68,7 +68,7 @@ class MechPageModel:
         cursor = self.conn.cursor()
 
         cursor.execute("""
-        DELETE FROM tbl_Mech_parts
+        DELETE FROM tbl_Mech_part
         WHERE Type=?
         AND Name=?
         AND (Color = ? OR (Color IS NULL AND ? IS NULL))
@@ -89,7 +89,7 @@ class MechPageModel:
         value_list = [mech_type]
         conditions_string = """
         SELECT Type,Name,Color,Quantity,Comment
-        FROM tbl_Mech_parts
+        FROM tbl_Mech_part
         WHERE Type=?
         """
         for condition, value in command_list:
@@ -109,7 +109,7 @@ class MechPageModel:
         cursor.execute("""
         SELECT DISTINCT
         Name,Color
-        FROM tbl_Mech_parts
+        FROM tbl_Mech_part
         WHERE Type = ?
         """,(mech_type,))
 
@@ -124,7 +124,7 @@ class MechPageModel:
 
         try:
             cursor.execute("""
-            UPDATE tbl_Mech_parts
+            UPDATE tbl_Mech_part
             SET Type=?,Name=?,Color=?,Quantity=?,Comment=?
             WHERE Type=?
             AND Name=?
