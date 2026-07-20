@@ -11,7 +11,7 @@ class AdminPanelAccessView(QDialog):
     def __init__(self, theme):
         super().__init__()
         self.is_dark = theme
-        self.setWindowTitle("Admin Panel Access")
+        self.setWindowTitle("Login as Admin")
         self.setFixedSize(300,260)
         self.username = QLineEdit(self)
         self.password = QLineEdit(self)

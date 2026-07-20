@@ -19,7 +19,6 @@ class LoginView(QDialog):
         self.password = QLineEdit(self)
 
         self.visibility_button = QPushButton(self)
-        self.forgot_button = QPushButton("Forgot my password",self)
         self.admin_panel_button = QPushButton("Admin panel",self)
         self.login_button = QPushButton("Login",self)
 
@@ -65,13 +64,10 @@ class LoginView(QDialog):
 
         h_layout = QHBoxLayout()
 
-        self.forgot_button.setFixedSize(115,20)
-        h_layout.addWidget(self.forgot_button)
-
         self.admin_panel_button.setFixedSize(75, 20)
         h_layout.addWidget(self.admin_panel_button)
 
-        h_layout.insertStretch(1,1)
+        h_layout.insertStretch(0,1)
         v_layout.addLayout(h_layout)
 
         self.login_button.setFont(font)
@@ -84,7 +80,6 @@ class LoginView(QDialog):
 
     def setup_signals(self):
         self.login_button.clicked.connect(self.login_signal.emit)
-        self.forgot_button.clicked.connect(self.forgot_password_signal.emit)
         self.admin_panel_button.clicked.connect(self.admin_panel_signal.emit)
         self.visibility_button.toggled.connect(self.change_visibility)
 
@@ -170,20 +165,4 @@ class LoginView(QDialog):
 
         self.visibility_button.setStyleSheet(visibility_button_style)
 
-        for button in (self.forgot_button,self.admin_panel_button):
-            button.setStyleSheet(other_buttons_style)
-
-import sys
-from PySide6.QtWidgets import QApplication
-
-def main() -> int:
-    app = QApplication(sys.argv)
-
-    view = LoginView(True)
-    view.show()
-
-    return app.exec()
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+        self.admin_panel_button.setStyleSheet(other_buttons_style)
