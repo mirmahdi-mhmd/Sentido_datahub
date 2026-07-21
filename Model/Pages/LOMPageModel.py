@@ -175,7 +175,7 @@ class LOMPageModel:
 
         else:
             cursor.close()
-            return "please fill type or name"
+            return "please fill EC type or PCB name"
 
         cursor.execute(condition_string)
         result = cursor.fetchall()

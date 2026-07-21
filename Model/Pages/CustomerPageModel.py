@@ -91,18 +91,19 @@ class CustomerPageModel:
     def adv_search(self,customer_name, customer_tel, customer_city):
         cursor = self.conn.cursor()
 
-        command_list = [["Tel=?", customer_tel],["City=?", customer_city]]
-        value_list = [customer_name]
+        command_list = [["Name=?", customer_name],["Tel=?", customer_tel],["City=?", customer_city]]
+        value_list = []
         conditions_string = """
         SELECT Name,Tel,City,Address,Comment
         FROM tbl_Customer
-        WHERE Name=?
+        WHERE 
         """
         for condition, value in command_list:
             if value is not None:
-                conditions_string += f" AND {condition}"
+                conditions_string += f"{condition} AND "
                 value_list.append(value)
 
+        conditions_string += "Customer_ID is not null"
         cursor.execute(conditions_string,value_list)
         result = cursor.fetchall()
 

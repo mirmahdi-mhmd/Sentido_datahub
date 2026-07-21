@@ -5,29 +5,31 @@ from PySide6.QtWidgets import QDialog, QComboBox, QPushButton, QHBoxLayout, QVBo
 from View.MainElements.IconPath import icon
 from View.MainElements.TableView import TableView
 
-class CustomerSearchDialog(QDialog):
+class UserSearchDialog(QDialog):
     adv_search_requested = Signal()
     close_requested = Signal()
     name_changed = Signal(str)
 
-    def __init__(self, theme, name_list,tel_list, city_list, headers, info):
-        super(CustomerSearchDialog, self).__init__()
+    def __init__(self, theme, name_list, username_list, tel_list, gmail_list, headers, info):
+        super(UserSearchDialog, self).__init__()
         self.is_dark = theme
-        self.setWindowTitle("ADV Search (Customer)")
+        self.setWindowTitle("ADV Search (User)")
         self.setMinimumSize(700, 300)
 
-        self.customer_name = QComboBox(self)
-        self.customer_tel = QComboBox(self)
-        self.customer_city = QComboBox(self)
+        self.user_name = QComboBox(self)
+        self.user_username = QComboBox(self)
+        self.user_tel = QComboBox(self)
+        self.user_gmail = QComboBox(self)
 
         self.tableview = TableView(self.is_dark, headers, info)
 
         self.adv_search_button = QPushButton("Search", self)
         self.close_button = QPushButton("Close", self)
 
-        self.name_list = name_list
-        self.tel_list = tel_list
-        self.city_list = city_list
+        self.names = name_list
+        self.usernames = username_list
+        self.tels = tel_list
+        self.gmails = gmail_list
 
         layout = QVBoxLayout(self)
         self.setup_comboboxes(layout)
@@ -41,12 +43,13 @@ class CustomerSearchDialog(QDialog):
         font = self.font()
         font.setPointSize(12)
 
-        for combobox,items in ((self.customer_name,self.name_list),(self.customer_tel,self.tel_list),(self.customer_city,self.city_list)):
+        for combobox,items in ((self.user_name,self.names),(self.user_username,self.usernames),
+                               (self.user_tel,self.tels),(self.user_gmail,self.gmails)):
             combobox.addItems(items)
             combobox.setCurrentIndex(-1)
 
-        for combobox, text, num in [(self.customer_name, "Name",1),(self.customer_tel, "Tel",1),
-                               (self.customer_city, "City",1)]:
+        for combobox, text, num in [(self.user_name, "Name",1),(self.user_username, "Username",1),
+                                    (self.user_tel, "Tel",1),(self.user_gmail, "Gmail",1)]:
             combobox.setEditable(True)
             combobox.setFont(font)
             combobox.setMaxVisibleItems(5)
@@ -69,7 +72,7 @@ class CustomerSearchDialog(QDialog):
     def setup_signals(self):
         self.adv_search_button.clicked.connect(self.adv_search_requested.emit)
         self.close_button.clicked.connect(self.close_requested.emit)
-        self.customer_name.currentIndexChanged.connect(lambda _:self.name_changed.emit(self.customer_name.currentText()))
+        self.user_name.currentIndexChanged.connect(lambda _:self.name_changed.emit(self.user_name.currentText()))
 
     def setup_style(self):
         base_combobox_style = """
@@ -123,13 +126,13 @@ class CustomerSearchDialog(QDialog):
                 border: 1px solid #ff6f29; 
             }"""
 
-        for combobox in [self.customer_name, self.customer_tel,self.customer_city]:
+        for combobox in [self.user_name, self.user_username, self.user_tel,self.user_gmail]:
             combobox.setStyleSheet(base_combobox_style + theme_combobox_style)
 
         self.adv_search_button.setStyleSheet(base_button_style + theme_button_style)
 
-    def add_comboboxes_items(self, tels, cities):
-        for combobox, data in ((self.customer_tel, tels),(self.customer_city, cities)):
+    def add_comboboxes_items(self, usernames, tels, gmails):
+        for combobox, data in ((self.user_username,usernames),(self.user_tel, tels),(self.user_gmail, gmails)):
             text = combobox.currentText()
             combobox.clear()
             combobox.addItems(data)

@@ -16,8 +16,10 @@ class CustomerSearchController:
         self.setup_signals()
 
     def setup_view(self):
-        types = self.model.fetch_distinct_values("Name")
-        self.view = CustomerSearchDialog(self.is_dark, types,self.headers, None)
+        names = self.model.fetch_distinct_values("Name")
+        tels = self.model.fetch_distinct_values("Tel")
+        cities = self.model.fetch_distinct_values("City")
+        self.view = CustomerSearchDialog(self.is_dark, names,tels,cities,self.headers, None)
 
     def setup_signals(self):
         self.view.adv_search_requested.connect(self.adv_search_requested)
@@ -29,7 +31,8 @@ class CustomerSearchController:
         customer_name = self.none_if_empty(self.view.customer_name.currentText())
         customer_tel = self.none_if_empty(self.view.customer_tel.currentText())
         customer_city = self.none_if_empty(self.view.customer_city.currentText())
-
+        if customer_name is None and customer_tel is None and customer_city is None:
+            return
         result = self.model.adv_search(customer_name,customer_tel,customer_city)
         self.view.tableview.update_data(result)
 
