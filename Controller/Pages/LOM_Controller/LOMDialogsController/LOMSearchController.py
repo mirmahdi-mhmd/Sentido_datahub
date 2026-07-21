@@ -39,18 +39,21 @@ class LOMSearchController(QObject):
                  self.none_if_empty(self.view.pcb_finishing.currentText()),
                  self.none_if_empty(self.view.pcb_thickness.currentText())],
 
-                (self.none_if_empty(self.view.ec_type.currentText()),
+                [self.none_if_empty(self.view.ec_type.currentText()),
                  self.none_if_empty(self.view.ec_part_number.currentText()),
                  self.none_if_empty(self.view.ec_marking.currentText()),
                  self.none_if_empty(self.view.ec_footprint.currentText()),
-                 self.none_if_empty(self.view.ec_manufacturer.currentText()))]
+                 self.none_if_empty(self.view.ec_manufacturer.currentText())]]
 
-        if data[0][1] is not None:
-            data[0][1] = int(data[0][1])
+        if data[0][0] is None and data [1][0] is None:
+            return
+        else:
+            if data[0][1] is not None:
+                data[0][1] = int(data[0][1])
 
-        result = self.model.adv_search(data[0][0], data[0][1], data[0][2], data[0][3], data[0][4],
-                              data[1][0], data[1][1], data[1][2], data[1][3], data[1][4])
-        self.view.tableview.update_data(result)
+            result = self.model.adv_search(data[0][0], data[0][1], data[0][2], data[0][3], data[0][4],
+                                  data[1][0], data[1][1], data[1][2], data[1][3], data[1][4])
+            self.view.tableview.update_data(result)
 
     def edit_requested(self, data):
         self.edit_dialog = LOMEditController(self.is_dark,data,self.model)
