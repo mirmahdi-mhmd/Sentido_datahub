@@ -33,8 +33,9 @@ class CustomerSearchController:
         customer_city = self.none_if_empty(self.view.customer_city.currentText())
         if customer_name is None and customer_tel is None and customer_city is None:
             return
-        result = self.model.adv_search(customer_name,customer_tel,customer_city)
-        self.view.tableview.update_data(result)
+        else:
+            result = self.model.adv_search(customer_name,customer_tel,customer_city)
+            self.view.tableview.update_data(result)
 
     def edit_requested(self, data):
         self.edit_dialog = CustomerEditController(self.is_dark,data,self.model)

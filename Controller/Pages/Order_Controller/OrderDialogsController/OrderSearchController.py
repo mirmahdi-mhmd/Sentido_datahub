@@ -29,9 +29,11 @@ class OrderSearchController:
         customer_name = self.none_if_empty(self.view.customer_name.currentText())
         customer_tel = self.none_if_empty(self.view.customer_tel.currentText())
         customer_city = self.none_if_empty(self.view.customer_city.currentText())
-
-        result = self.model.adv_search(customer_name,customer_tel,customer_city)
-        self.view.tableview.update_data(result)
+        if customer_name is None and customer_tel is None and customer_city is None:
+            return
+        else:
+            result = self.model.adv_search(customer_name,customer_tel,customer_city)
+            self.view.tableview.update_data(result)
 
     def open_details(self, data):
         self.details_dialog = OrderDtlPageController(self.is_dark,data[6],data[5])
