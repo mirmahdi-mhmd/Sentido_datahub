@@ -1,0 +1,111 @@
+-- CREATE DATABASE [Sentido_datahub]
+USE [Sentido_datahub]
+
+-- create table tbl_PCB(
+--     PCB_ID        int identity (100, 1) primary key,
+--     Name          varchar(20)   not null,
+--     Sheet_Qty     int default 0 not null,
+--     [Board/sheet] int default 0 not null,
+--     Thickness     varchar(10),
+--     Color         varchar(20),
+--     Finishing     varchar(20),
+--     Board_Qty     as [Sheet_Qty] * [Board/sheet],
+--     Price         int default 0,
+--     Comment       nvarchar(120),
+--     constraint tbl_PCB_pk
+--         unique (Name, [Board/sheet], Color, Thickness, Finishing)
+-- )
+-- create table tbl_EC(
+--     EC_ID        int identity primary key,
+--     Type         varchar(20)  not null,
+--     Part_number  nvarchar(20) not null,
+--     Footprint    varchar(20),
+--     Quantity     int default 0,
+--     Manufacturer varchar(20),
+--     Comment      nvarchar(120),
+--     Marking      varchar(20),
+--     Price        int default 0,
+--     constraint tbl_EC_pk
+--         unique (Type, Part_number, Marking, Footprint, Manufacturer)
+-- )
+-- create table tbl_LOM
+-- (
+--     LOM_ID    int identity constraint tbl_LOM_pk primary key,
+--     PCB_ID    int not null references tbl_PCB,
+--     EC_ID     int not null references tbl_EC,
+--     Sign_list varchar(120),
+--     Feeder    varchar(10),
+--     Nozzle    varchar(10),
+--     Count     int default 0 not null,
+--     Comment   varchar(120),
+--     constraint tbl_LOM_pk_2 unique (PCB_ID, EC_ID)
+-- )
+-- create table tbl_Product
+-- (
+--     Product_ID int identity constraint tbl_Product_pk primary key,
+--     Type       varchar(20)   not null,
+--     Name       varchar(20)   not null,
+--     Color      varchar(20),
+--     Quantity   int default 0 not null,
+--     Price      int default 0 not null,
+--     Comment    nvarchar(120)
+-- )
+-- create table tbl_Customer
+-- (
+--     Customer_ID int identity constraint tbl_Customer_pk primary key,
+--     Name        varchar(20)  not null,
+--     Tel         varchar(20)  not null,
+--     City        varchar(20)  not null,
+--     Address     varchar(120) not null,
+--     Comment     nvarchar(120)
+-- )
+-- create table tbl_Mech_part
+-- (
+--     Part_ID  int identity (0, 1) constraint tbl_Mech_part_pk_2 primary key,
+--     Type     varchar(20)   not null,
+--     Name     varchar(20)   not null,
+--     Color    varchar(20),
+--     Quantity int default 0 not null,
+--     Comment  varchar(120),
+--     constraint tbl_Mech_part_pk unique (Type, Color, Name)
+-- )
+-- create table tbl_Order
+-- (
+--     Order_ID    int identity (0, 1) constraint tbl_Order_pk primary key,
+--     Customer_ID int not null constraint tbl_Order_tbl_Customer_Customer_ID_fk references tbl_Customer,
+--     date        date not null,
+--     Comment     varchar(120),
+--     Status      varchar(20) default 'Pending' not null
+-- )
+-- create table tbl_Order_dtl
+-- (
+--     Order_dtl_ID int identity (0, 1) constraint tbl_Order_dtl_pk primary key,
+--     Order_ID     int not null references tbl_Order,
+--     Product_ID   int not null references tbl_Product,
+--     Serial_ID    int constraint tbl_Order_dtl_pk_2 unique references tbl_Serial,
+--     Count        int default 1 not null,
+--     Price        int default 0
+-- )
+-- create table tbl_Serial
+-- (
+--     Serial_ID     int identity primary key,
+--     Product_ID    int not null references tbl_Product,
+--     Serial_number nvarchar(50) not null constraint tbl_Serial_pk unique,
+--     Mac_address   nvarchar(100),
+--     Status        nvarchar(10) default 'Available' not null,
+--     Comment       nvarchar(120)
+-- )
+-- create table tbl_User
+-- (
+--     User_ID  int identity (0, 1) primary key,
+--     Username varchar(30) not null constraint tbl_User_pk unique,
+--     Name     varchar(40) not null,
+--     Tel      varchar(11) not null,
+--     Gmail    varchar(40) not null
+-- )
+-- create table tbl_Admin
+-- (
+--     Admin_id int identity primary key,
+--     Username nvarchar(30)  not null unique,
+--     Gmail    nvarchar(50)  not null
+-- )
