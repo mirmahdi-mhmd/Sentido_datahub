@@ -96,14 +96,13 @@ class CustomerPageModel:
         conditions_string = """
         SELECT Name,Tel,City,Address,Comment
         FROM tbl_Customer
-        WHERE 
+        WHERE 1=1
         """
         for condition, value in command_list:
             if value is not None:
-                conditions_string += f"{condition} AND "
+                conditions_string += f" AND {condition} "
                 value_list.append(value)
 
-        conditions_string += "Customer_ID is not null"
         cursor.execute(conditions_string,value_list)
         result = cursor.fetchall()
 
